@@ -76,9 +76,6 @@ class HomeViewModelTest {
     fun `fetchHomeTrendingSellers should update homeTrendingSellers with Success result`() = runTest {
         val useCase: HomeUseCase = mockk()
         val viewModel = HomeViewModel(useCase)
-        val lat = 0.5
-        val lang = 1.5
-        val filter=1
         val trendingSellersResponse = mockk<TrendingSellersResponse>()
         coEvery { useCase.getTrendingSellers(homeRequestData) } returns ResultApiCall.Success(trendingSellersResponse)
         val observer = mockk<Observer<ResultApiCall<TrendingSellersResponse>>>(relaxed = true)

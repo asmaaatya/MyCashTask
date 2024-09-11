@@ -1,4 +1,4 @@
-package com.mycash.domain.models.login
+package com.mycash.domain.models.beans.login
 
 data class Addresse(
     val address: Any,

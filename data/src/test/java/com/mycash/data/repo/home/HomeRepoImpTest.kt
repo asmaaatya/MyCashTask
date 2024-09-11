@@ -1,6 +1,10 @@
 package com.mycash.data.repo.home
 
+import com.mycash.data.TestDummyData
+import com.mycash.data.TestDummyData.filter
 import com.mycash.data.TestDummyData.homeRequestData
+import com.mycash.data.TestDummyData.latitude
+import com.mycash.data.TestDummyData.longitude
 import com.mycash.data.remote.apis.ApiService
 import com.mycash.domain.models.ResultApiCall
 import com.mycash.domain.models.responses.HomeBaseCategoriesResponse
@@ -41,7 +45,7 @@ class HomeRepoImpTest {
             every { success } returns true
             every { message } returns "result ok "
         }
-        coEvery { apiService.getPopularSellers(homeRequestData) } coAnswers { popularSellersResponse}
+        coEvery { apiService.getPopularSellers(latitude,longitude, filter ) } coAnswers { popularSellersResponse}
 
         val result = homeRepoImp.getPopularSellers(homeRequestData)
         assertEquals(ResultApiCall.Success(popularSellersResponse), result)
@@ -51,16 +55,13 @@ class HomeRepoImpTest {
     fun getTrendingSellers() = runTest {
         val apiService: ApiService = mockk()
         val homeRepoImp=HomeRepoImp(apiService)
-        val lat = 0.5
-        val lang = 1.5
-        val filter=1
         val trendingSellersResponse = mockk<TrendingSellersResponse> {
             every { success } returns true
             every { message } returns "result ok "
         }
-        coEvery { apiService.getTrendingSellers(lat,lang,filter) } coAnswers { trendingSellersResponse}
+        coEvery { apiService.getTrendingSellers(latitude,longitude, TestDummyData.filter) } coAnswers { trendingSellersResponse}
 
-        val result = homeRepoImp.getTrendingSellers(lat,lang,filter)
+        val result = homeRepoImp.getTrendingSellers(homeRequestData)
         assertEquals(ResultApiCall.Success(trendingSellersResponse), result)
     }
 }

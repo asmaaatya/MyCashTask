@@ -14,6 +14,7 @@ import com.mycash.domain.models.ResultApiCall
 import com.mycash.domain.models.ValidationState
 import com.mycash.domain.models.requests.SingUpRequest
 import com.mycash.utils.HelperMethods.gone
+import com.mycash.utils.HelperMethods.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -41,11 +42,11 @@ class SignUpFragment : Fragment() {
         signUpViewModel.signupResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visible()
                 }
 
                 is ResultApiCall.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     Toast.makeText(
                         requireContext(),
                         "User created Successfully!",
@@ -56,7 +57,7 @@ class SignUpFragment : Fragment() {
                 }
 
                 is ResultApiCall.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     Toast.makeText(
                         requireContext(),
                         "Signup Failed: ${result.message}",

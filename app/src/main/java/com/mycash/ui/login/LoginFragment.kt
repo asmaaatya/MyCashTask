@@ -16,6 +16,7 @@ import com.mycash.domain.models.ValidationState
 import com.mycash.domain.models.requests.LogInRequest
 import com.mycash.ui.SharedViewModel
 import com.mycash.utils.HelperMethods.gone
+import com.mycash.utils.HelperMethods.visible
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,11 +42,11 @@ class LoginFragment : Fragment() {
         loginViewModel.loginResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visible()
                 }
 
                 is ResultApiCall.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     Toast.makeText(requireContext(), "Login Successful!", Toast.LENGTH_SHORT).show()
                     sharedViewModel.setUserData(result.data.data)
                     val navController = findNavController()
@@ -54,7 +55,7 @@ class LoginFragment : Fragment() {
                 }
 
                 is ResultApiCall.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     Toast.makeText(
                         requireContext(),
                         "Login Failed: ${result.message}",

@@ -17,6 +17,8 @@ import com.mycash.ui.SharedViewModel
 import com.mycash.ui.home.adaters.HomeCategoriesAdapter
 import com.mycash.ui.home.adaters.PopularCategoriesAdapter
 import com.mycash.ui.home.adaters.TrendingCategoriesAdapter
+import com.mycash.utils.HelperMethods.gone
+import com.mycash.utils.HelperMethods.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
@@ -58,6 +60,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private suspend fun getHomeRequest(): HomeRequest? {
         return sharedViewModel.userLogin.firstOrNull()?.let { data ->
             val address = data.addresses.firstOrNull()
@@ -77,25 +80,26 @@ class HomeFragment : Fragment() {
             adapter = categoriesAdapter
         }
 
-            homeViewModel.homeBaseCategories.observe(viewLifecycleOwner) { result ->
-                when (result) {
-                    is ResultApiCall.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-
-                    is ResultApiCall.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        categoriesAdapter.updateCategories(result.data.data.data)
-                    }
-
-                    is ResultApiCall.Failure -> {
-                        binding.progressBar.visibility = View.GONE
-
-                        Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {}
+        homeViewModel.homeBaseCategories.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is ResultApiCall.Loading -> {
+                    binding.progressBar.visible()
                 }
-            };
+
+                is ResultApiCall.Success -> {
+                    binding.progressBar.gone()
+                    categoriesAdapter.updateCategories(result.data.data.data)
+                }
+
+                is ResultApiCall.Failure -> {
+                    binding.progressBar.gone()
+
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
+        };
 
         homeViewModel.fetchHomeBaseCategories()
     }
@@ -111,19 +115,20 @@ class HomeFragment : Fragment() {
         homeViewModel.homeTrendingSellers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visible()
                 }
 
                 is ResultApiCall.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     trendingAdapter.updateCategories(result.data.data)
                 }
 
                 is ResultApiCall.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
 
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {}
             }
         };
@@ -142,16 +147,16 @@ class HomeFragment : Fragment() {
         homeViewModel.homePopularSellers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
+                    binding.progressBar.visible()
                 }
 
                 is ResultApiCall.Success -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
                     popularCategoriesAdapter.updateCategories(result.data.data)
                 }
 
                 is ResultApiCall.Failure -> {
-                    binding.progressBar.visibility = View.GONE
+                    binding.progressBar.gone()
 
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                 }

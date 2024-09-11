@@ -1,7 +1,5 @@
 package com.mycash.domain.models.beans.login
 
-import com.mycash.domain.models.login.Addresse
-
 data class Login(
     val addresses: List<Addresse>,
     val balance: String,

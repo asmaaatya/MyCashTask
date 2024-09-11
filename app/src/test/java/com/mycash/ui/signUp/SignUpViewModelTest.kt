@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.mycash.TestDummyData.user
 import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.ValidationState
 import com.mycash.domain.models.responses.SignUpResponse
 import com.mycash.domain.usecase.signUp.SignUpUseCase
 import io.mockk.coEvery
@@ -38,7 +39,7 @@ class SignUpViewModelTest {
     }
 
     @Test
-    fun signUp_validInput_success() = runTest{
+    fun signUp_validInput_success() = runTest {
         val useCase: SignUpUseCase = mockk()
         val viewModel = SignUpViewModel(useCase)
         val signUpResponse = mockk<SignUpResponse>()
@@ -53,121 +54,132 @@ class SignUpViewModelTest {
         viewModel.signupResult.removeObserver(observer)
     }
 
-//    @Test
-//    fun signUp_emptyName_failure()= runTest{
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = ""
-//        val email = "asmmaa@gmail.com"
-//        val password = "12345678"
-//        val phone = "01213456789"
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("user name is required")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("user name is required")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
+    @Test
+    fun signUp_emptyName_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
+
+        coEvery { useCase.signUp(user.copy(name = "")) } returns ResultApiCall.InputState(
+            ValidationState.EmptyName
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(name = ""))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.EmptyName)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
 
 
-//    @Test
-//    fun signUp_emptyEmail_failure()= runTest{
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = "asmmaa"
-//        val email = ""
-//        val password = "12345678"
-//        val phone = "01213456789"
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("email is required")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("email is required")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
-//
-//    @Test
-//    fun signUp_emptyPassword_failure() = runTest{
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = "asmmaa"
-//        val email = "asmaa@gmail.com"
-//        val password = ""
-//        val phone = "01213456789"
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("password is required")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("password is required")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
-//
-//    @Test
-//    fun signUp_emptyPhone_failure() = runTest {
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = "asmmaa"
-//        val email = "asmaa@gmail.com"
-//        val password = "12345678"
-//        val phone = ""
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("phone is required")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("phone is required")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
-//
-//    @Test
-//    fun signUp_invalidEmailFormat_failure() = runTest{
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = "asmmaa"
-//        val email = "asmaa@gmailcom"
-//        val password = "12345678"
-//        val phone = "01213456789"
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("enter valid email format")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("enter valid email format")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
-//
-//    @Test
-//    fun signUp_invalidPhoneNumberFormat_failure() = runTest {
-//        val useCase: SignUpUseCase = mockk()
-//        val viewModel = SignUpViewModel(useCase)
-//        val name = "asmmaa"
-//        val email = "asmaa@gmail.com"
-//        val password = "12345678"
-//        val phone = "012134567896556"
-//        coEvery { useCase.signUp(name,email, password,phone) } returns ResultApiCall.Failure("enter valid phone number")
-//        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
-//        viewModel.signupResult.observeForever(observer)
-//        viewModel.signUp(name, email, password, phone)
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Loading) }
-//        advanceUntilIdle()
-//        verify { observer.onChanged(ResultApiCall.Failure("enter valid phone number")) }
-//        viewModel.signupResult.removeObserver(observer)
-//    }
+    @Test
+    fun signUp_emptyEmail_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
 
+        coEvery { useCase.signUp(user.copy(email = "")) } returns ResultApiCall.InputState(
+            ValidationState.EmptyEmail
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(email = ""))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.EmptyEmail)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
+
+    @Test
+    fun signUp_emptyPassword_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
+
+        coEvery { useCase.signUp(user.copy(password = "")) } returns ResultApiCall.InputState(
+            ValidationState.EmptyPassword
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(password = ""))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.EmptyPassword)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
+
+    @Test
+    fun signUp_emptyPhone_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
+
+        coEvery { useCase.signUp(user.copy(phone = "")) } returns ResultApiCall.InputState(
+            ValidationState.EmptyPhone
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(phone = ""))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.EmptyPhone)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
+
+    @Test
+    fun signUp_invalidEmailFormat_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
+
+        coEvery { useCase.signUp(user.copy(email = "invalid-email")) } returns ResultApiCall.InputState(
+            ValidationState.IncorrectEmail
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(email = "invalid-email"))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.IncorrectEmail)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
+
+    @Test
+    fun signUp_invalidPhoneNumberFormat_failure() = runTest {
+        val useCase: SignUpUseCase = mockk()
+        val viewModel = SignUpViewModel(useCase)
+
+        coEvery { useCase.signUp(user.copy(phone = "0123456789012345")) } returns ResultApiCall.InputState(
+            ValidationState.MustHasMore11LengthPhone
+        )
+
+        val observer = mockk<Observer<ResultApiCall<SignUpResponse>>>(relaxed = true)
+        viewModel.signupResult.observeForever(observer)
+
+        viewModel.signUp(user.copy(phone = "0123456789012345"))
+        advanceUntilIdle()
+
+        verify { observer.onChanged(ResultApiCall.Loading) }
+        verify { observer.onChanged(ResultApiCall.InputState(ValidationState.MustHasMore11LengthPhone)) }
+
+        viewModel.signupResult.removeObserver(observer)
+    }
 
 
 }
