@@ -7,11 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.mycash.R
 import com.mycash.databinding.FragmentSignUpBinding
-import com.mycash.domain.model.ResultApiCall
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.ValidationState
+import com.mycash.domain.models.requests.SingUpRequest
+import com.mycash.utils.HelperMethods.gone
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -25,7 +27,7 @@ class SignUpFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
@@ -34,9 +36,9 @@ class SignUpFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+//        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        signUpViewModel.signupResult.observe(viewLifecycleOwner, Observer { result ->
+        signUpViewModel.signupResult.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -50,7 +52,7 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     val navController = findNavController()
-                    navController.navigate(R.id.action_loginFragment_to_navigation_home)
+                    navController.navigate(R.id.action_signUpFragment_to_navigation_home)
                 }
 
                 is ResultApiCall.Failure -> {
@@ -61,60 +63,84 @@ class SignUpFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
+                is ResultApiCall.InputState -> {
+                    binding.progressBar.gone()
+                    when (result.errorState) {
+                        ValidationState.EmptyName -> binding.nameTv.error =
+                            getString(R.string.please_enter_your_name)
+
+                        ValidationState.MustHasMore14LengthName -> binding.nameTv.error =
+                            getString(R.string.name_must_be_at_least_14_characters)
+
+                        ValidationState.EmptyEmail -> {
+                            binding.nameTv.error =
+                                getString(R.string.enter_your_email)
+
+                        }
+
+                        ValidationState.IncorrectEmail -> {
+                            binding.nameTv.error =
+                                getString(R.string.please_enter_a_valid_email)
+                        }
+
+
+                        ValidationState.EmptyPassword -> {
+                            binding.passwordTv.error =
+                                getString(R.string.please_enter_your_password)
+                        }
+
+                        ValidationState.MustHasMore8LengthPassword -> {
+                            binding.passwordTv.error =
+                                getString(R.string.password_must_be_at_least_8_characters)
+                        }
+
+                        ValidationState.EmptyConfirmPassword -> {
+                            binding.confirmPasswordTv.error =
+                                getString(R.string.please_confirm_your_password)
+                        }
+
+                        ValidationState.PasswordNotMatch -> {
+                            binding.confirmPasswordTv.error =
+                                getString(R.string.passwords_do_not_match)
+                        }
+
+                        ValidationState.EmptyPhone -> {
+                            binding.phoneTv.error =
+                                getString(R.string.please_enter_your_phone_number)
+                        }
+
+                        ValidationState.MustHasMore11LengthPhone -> {
+                            binding.phoneTv.error =
+                                getString(R.string.phone_number_must_be_at_least_11_characters)
+                        }
+
+                        ValidationState.Valid -> {
+                        }
+                    }
+                }
             }
-        })
+        }
         binding.loginTv.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.action_signUpFragment_to_loginFragment)
         }
         binding.signupBtn.setOnClickListener {
-            val email = binding.emailEt.text.toString()
-            val password = binding.passwordEt.text.toString()
-            val confirmPassword = binding.confirmPasswordEt.text.toString()
-            val name = binding.nameEt.text.toString()
-            val phone = binding.phoneEt.text.toString()
-            when {
-                name.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Please enter your name", Toast.LENGTH_SHORT).show()
-                }
-                name.length < 14 -> {
-                    Toast.makeText(requireContext(), "Name must be at least 14 characters", Toast.LENGTH_SHORT).show()
-                }
-                email.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Please enter your email", Toast.LENGTH_SHORT).show()
-                }
-                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                    Toast.makeText(requireContext(), "Please enter a valid email", Toast.LENGTH_SHORT).show()
-                }
-                password.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Please enter your password", Toast.LENGTH_SHORT).show()
-                }
-                password.length < 8 -> {
-                    Toast.makeText(requireContext(), "Password must be at least 8 characters", Toast.LENGTH_SHORT).show()
-                }
-                confirmPassword.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Please confirm your password", Toast.LENGTH_SHORT).show()
-                }
-                password != confirmPassword -> {
-                    Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT).show()
-                }
-                phone.isEmpty() -> {
-                    Toast.makeText(requireContext(), "Please enter your phone number", Toast.LENGTH_SHORT).show()
-                }
-                phone.length < 11 -> {
-                    Toast.makeText(requireContext(), "Phone number must be at least 11 characters", Toast.LENGTH_SHORT).show()
-                }
-
-                else -> {
-                    signUpViewModel.signUp(name, email, password, phone)
-                }
-
-            }
+            signUpViewModel.signUp(getSignUpRequest())
         }
-            }
+    }
 
-            override fun onDestroyView() {
-                super.onDestroyView()
-                _binding = null
-            }
-        }
+    private fun getSignUpRequest(): SingUpRequest {
+        val email = binding.emailEt.text.toString()
+        val password = binding.passwordEt.text.toString()
+        val confirmPassword = binding.confirmPasswordEt.text.toString()
+        val name = binding.nameEt.text.toString()
+        val phone = binding.phoneEt.text.toString()
+        return SingUpRequest(name, email, password, phone, confirmPassword)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

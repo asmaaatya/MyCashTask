@@ -9,15 +9,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#0D9C9C9C"
-        >
+        android:background="#0D9C9C9C">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/header_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
             android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -26,8 +25,8 @@
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_20sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
                 android:src="@drawable/ic_left_arrow"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +55,8 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_home"
                 android:layout_margin="@dimen/_10sdp"
+                android:text="@string/title_home"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
                 android:textStyle="bold"
@@ -80,33 +79,33 @@
                 android:id="@+id/welcome_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HELLO USER"
+                android:layout_margin="@dimen/_5sdp"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
-                android:layout_margin="@dimen/_5sdp"
                 android:textStyle="normal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="HELLO USER" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/user_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-              android:layout_margin="@dimen/_5sdp"
-                android:drawableEnd= "@drawable/ic_right_arrow"
+                android:layout_margin="@dimen/_5sdp"
+                android:drawableEnd="@drawable/ic_right_arrow"
                 android:drawablePadding="5dp"
-                android:textStyle="italic"
-                android:text="egypt,cairo"
                 android:textColor="@color/dark_color"
-                android:textSize="18dp"
+                android:textSize="18sp"
+                android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/welcome_tv" />
+                app:layout_constraintTop_toBottomOf="@id/welcome_tv"
+                tools:text="egypt,cairo" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/serach_and_filter_layout"
+            android:id="@+id/search_and_filter_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_5sdp"
@@ -117,11 +116,11 @@
                 android:id="@+id/search"
                 android:layout_width="@dimen/_220sdp"
                 android:layout_height="@dimen/_28sdp"
-                android:padding="@dimen/_3sdp"
                 android:layout_margin="@dimen/_5sdp"
-                android:hint="@string/search_for_fav_food"
-                android:textColorHint="@color/light_gray_color"
                 android:background="@drawable/outlined_btn"
+                android:hint="@string/search_for_fav_food"
+                android:padding="@dimen/_3sdp"
+                android:textColorHint="@color/light_gray_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -131,9 +130,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_25sdp"
                 android:layout_margin="@dimen/_10sdp"
+                android:background="@drawable/filled_btn"
                 android:backgroundTint="@color/orange"
                 android:src="@drawable/ic_search"
-                android:background="@drawable/filled_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/search"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -145,8 +144,8 @@
                 android:layout_margin="@dimen/_10sdp"
                 android:src="@drawable/ic_filter"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/search_icon"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/search_icon"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -155,38 +154,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/serach_and_filter_layout"
             app:layout_constraintBottom_toTopOf="@id/popular_now_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/search_and_filter_layout">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/categories_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/categories"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/categories"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/viewAll_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_all"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/view_all"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categories_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/categories_rv"
-                app:layout_constraintTop_toBottomOf="@id/categories_tv"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </androidx.recyclerview.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@id/categories_tv"
+                tools:itemCount="3"
+                tools:listitem="@layout/categories_list_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -194,38 +199,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/categories_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/categories_layout">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/popular_now_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
+                android:layout_marginBottom="@dimen/_5sdp"
                 android:text="@string/popular_now"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
-                android:layout_marginBottom="@dimen/_5sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/viewAll_tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_all"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/view_all"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/popular_now_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/popular_now_rv"
-                app:layout_constraintTop_toBottomOf="@id/popular_now_tv"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </androidx.recyclerview.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@id/popular_now_tv" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -233,37 +240,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
-            app:layout_constraintTop_toBottomOf="@id/popular_now_layout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/popular_now_layout">
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/trending_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trending_now"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/trending_now"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_14sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/viewAll_tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_all"
                 android:layout_marginBottom="@dimen/_5sdp"
+                android:text="@string/view_all"
                 android:textColor="@color/orange"
                 android:textSize="@dimen/_12sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trending_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/trending_rv"
-                app:layout_constraintTop_toBottomOf="@id/trending_tv"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-            </androidx.recyclerview.widget.RecyclerView>
+                app:layout_constraintTop_toBottomOf="@id/trending_tv"></androidx.recyclerview.widget.RecyclerView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ProgressBar
@@ -271,10 +280,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

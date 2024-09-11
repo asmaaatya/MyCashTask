@@ -1,10 +1,11 @@
 package com.mycash.data.repo.home
 
+import com.mycash.data.TestDummyData.homeRequestData
 import com.mycash.data.remote.apis.ApiService
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.homeBaseCategories.HomeBaseCategoriesResponse
-import com.mycash.domain.model.popular_sellers.PopularSellersResponse
-import com.mycash.domain.model.trending_sellers.TrendingSellersResponse
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.responses.HomeBaseCategoriesResponse
+import com.mycash.domain.models.responses.PopularSellersResponse
+import com.mycash.domain.models.responses.TrendingSellersResponse
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -36,16 +37,13 @@ class HomeRepoImpTest {
     fun getPopularSellers() = runTest {
         val apiService: ApiService = mockk()
         val homeRepoImp=HomeRepoImp(apiService)
-        val lat = 0.5
-        val lang = 1.5
-        val filter=1
         val popularSellersResponse = mockk<PopularSellersResponse> {
             every { success } returns true
             every { message } returns "result ok "
         }
-        coEvery { apiService.getPopularSellers(lat,lang,filter) } coAnswers { popularSellersResponse}
+        coEvery { apiService.getPopularSellers(homeRequestData) } coAnswers { popularSellersResponse}
 
-        val result = homeRepoImp.getPopularSellers(lat,lang,filter)
+        val result = homeRepoImp.getPopularSellers(homeRequestData)
         assertEquals(ResultApiCall.Success(popularSellersResponse), result)
     }
 

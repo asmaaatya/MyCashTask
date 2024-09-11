@@ -43,11 +43,16 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    // mockk
-    testImplementation("io.mockk:mockk-android:1.13.11")
-    testImplementation("io.mockk:mockk-agent:1.13.11")
 
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    // mockk
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+
+    testImplementation(libs.androidx.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlinx.coroutines.core)
+
+    // gson converter
+    implementation(libs.gson)
+
 }

@@ -20,4 +20,14 @@
     <string name="popular_now">Popular now.</string>
     <string name="trending_now">Trending now.</string>
     <string name="view_all">view all</string>
+    <string name="please_enter_your_name">Please enter your name</string>
+    <string name="name_must_be_at_least_14_characters">Name must be at least 14 characters</string>
+    <string name="please_enter_your_email">Please enter your email</string>
+    <string name="please_enter_a_valid_email">Please enter a valid email</string>
+    <string name="please_enter_your_password">Please enter your password</string>
+    <string name="please_enter_your_phone_number">Please enter your phone number</string>
+    <string name="phone_number_must_be_at_least_11_characters">Phone number must be at least 11 characters</string>
+    <string name="please_confirm_your_password">Please confirm your password</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_must_be_at_least_8_characters">Password must be at least 8 characters</string>
 </resources>

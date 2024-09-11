@@ -4,10 +4,11 @@ package com.mycash.ui.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.homeBaseCategories.HomeBaseCategoriesResponse
-import com.mycash.domain.model.popular_sellers.PopularSellersResponse
-import com.mycash.domain.model.trending_sellers.TrendingSellersResponse
+import com.mycash.TestDummyData.homeRequestData
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.responses.HomeBaseCategoriesResponse
+import com.mycash.domain.models.responses.PopularSellersResponse
+import com.mycash.domain.models.responses.TrendingSellersResponse
 import com.mycash.domain.usecase.HomeUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -59,14 +60,11 @@ class HomeViewModelTest {
     fun `fetchPopularSellers should update homePopularSellers with Success result`() = runTest {
         val useCase: HomeUseCase = mockk()
         val viewModel = HomeViewModel(useCase)
-        val lat = 0.5
-        val lang = 1.5
-        val filter=1
         val popularSellersResponse = mockk<PopularSellersResponse>()
-        coEvery { useCase.getPopularSellers(lat,lang,filter) } returns ResultApiCall.Success(popularSellersResponse)
+        coEvery { useCase.getPopularSellers(homeRequestData) } returns ResultApiCall.Success(popularSellersResponse)
         val observer = mockk<Observer<ResultApiCall<PopularSellersResponse>>>(relaxed = true)
         viewModel.homePopularSellers.observeForever(observer)
-        viewModel.fetchPopularSellers(lat,lang,filter)
+        viewModel.fetchPopularSellers(homeRequestData)
         advanceUntilIdle()
         verify { observer.onChanged(ResultApiCall.Loading) }
         advanceUntilIdle()
@@ -82,10 +80,10 @@ class HomeViewModelTest {
         val lang = 1.5
         val filter=1
         val trendingSellersResponse = mockk<TrendingSellersResponse>()
-        coEvery { useCase.getTrendingSellers(lat,lang,filter) } returns ResultApiCall.Success(trendingSellersResponse)
+        coEvery { useCase.getTrendingSellers(homeRequestData) } returns ResultApiCall.Success(trendingSellersResponse)
         val observer = mockk<Observer<ResultApiCall<TrendingSellersResponse>>>(relaxed = true)
         viewModel.homeTrendingSellers.observeForever(observer)
-        viewModel.fetchHomeTrendingSellers(lat,lang,filter)
+        viewModel.fetchHomeTrendingSellers(homeRequestData)
         advanceUntilIdle()
         verify { observer.onChanged(ResultApiCall.Loading) }
         advanceUntilIdle()

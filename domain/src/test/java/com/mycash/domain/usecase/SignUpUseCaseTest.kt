@@ -1,8 +1,11 @@
 package com.mycash.domain.usecase
 
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.signUp.SignUpResponse
+import com.mycash.domain.TestDummyData.user
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.responses.SignUpResponse
 import com.mycash.domain.repo.SignUpRepository
+import com.mycash.domain.usecase.signUp.SignUpUseCase
+import com.mycash.domain.usecase.signUp.ValidationSignUpUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -15,25 +18,21 @@ class SignUpUseCaseTest {
 
     @Test
     fun signUp() = runTest {
-        //given
+
+        //Given
         val signUpRepository: SignUpRepository = mockk()
-        val signUpUseCase = SignUpUseCase(signUpRepository)
-        val name = "asmmaa"
-        val email = "asmaa@gmail.com"
-        val password = "12345678"
-        val phone = "012134567896556"
+        val validationUseCase= mockk<ValidationSignUpUseCase>()
+        val signUpUseCase = SignUpUseCase(signUpRepository,validationUseCase)
         val signUpResponse = mockk<SignUpResponse>()
-        //when
+
+        //When
         coEvery {
-            signUpUseCase.signUp(
-                name,
-                email,
-                password,
-                phone
-            )
-        } coAnswers { ResultApiCall.Success(signUpResponse) }
-        //then
-        val result = signUpUseCase.signUp(name, email, password, phone)
+            signUpUseCase.signUp(user)
+        } coAnswers { ResultApiCall.Success(signUpResponse)
+        }
+
+        //Then
+        val result = signUpUseCase.signUp(user)
         assertEquals(ResultApiCall.Success(signUpResponse), result)
     }
 }

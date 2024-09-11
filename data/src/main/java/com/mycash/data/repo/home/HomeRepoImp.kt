@@ -1,10 +1,11 @@
 package com.mycash.data.repo.home
 
 import com.mycash.data.remote.apis.ApiService
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.homeBaseCategories.HomeBaseCategoriesResponse
-import com.mycash.domain.model.popular_sellers.PopularSellersResponse
-import com.mycash.domain.model.trending_sellers.TrendingSellersResponse
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.requests.HomeRequest
+import com.mycash.domain.models.responses.HomeBaseCategoriesResponse
+import com.mycash.domain.models.responses.PopularSellersResponse
+import com.mycash.domain.models.responses.TrendingSellersResponse
 import com.mycash.domain.repo.HomeRepository
 import javax.inject.Inject
 
@@ -19,12 +20,10 @@ class HomeRepoImp @Inject constructor(private val apiService: ApiService) : Home
     }
 
     override suspend fun getPopularSellers(
-        latitude: Double,
-        longitude: Double,
-        filter: Int
+        request: HomeRequest
     ): ResultApiCall<PopularSellersResponse> {
         return try {
-            val response = apiService.getPopularSellers(latitude, longitude, filter)
+            val response = apiService.getPopularSellers(request.latitude,request.longitude,request.filter)
             ResultApiCall.Success(response)
         } catch (e: Exception) {
             ResultApiCall.Failure(e.message ?: "Some error occurred")
@@ -32,12 +31,10 @@ class HomeRepoImp @Inject constructor(private val apiService: ApiService) : Home
     }
 
     override suspend fun getTrendingSellers(
-        latitude: Double,
-        longitude: Double,
-        filter: Int
+        request: HomeRequest
     ): ResultApiCall<TrendingSellersResponse> {
         return try {
-            val response = apiService.getTrendingSellers(latitude, longitude, filter)
+            val response = apiService.getTrendingSellers(request.latitude,request.longitude,request.filter)
             ResultApiCall.Success(response)
         } catch (e: Exception) {
             ResultApiCall.Failure(e.message ?: "Some error occurred")

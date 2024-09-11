@@ -1,15 +1,15 @@
 package com.mycash.ui
 
 import androidx.lifecycle.ViewModel
-import com.mycash.domain.model.login.Data
+import com.mycash.domain.models.beans.login.Login
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.runBlocking
 
 class SharedViewModel : ViewModel() {
-    private val _data = MutableStateFlow<Data?>(null)
+    private val _login = MutableStateFlow<Login?>(null)
 
-    val userData: StateFlow<Data?> get() = _data
-    fun setUserData(data:  Data) = runBlocking {
-        _data.emit(data) }
+    val userLogin: StateFlow<Login?> get() = _login
+    fun setUserData(login: Login) = runBlocking {
+        _login.emit(login) }
 }

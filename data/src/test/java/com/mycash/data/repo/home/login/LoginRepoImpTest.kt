@@ -1,10 +1,9 @@
 package com.mycash.data.repo.home.login
 
+import com.mycash.data.TestDummyData.loggedInUser
 import com.mycash.data.remote.apis.ApiService
-import com.mycash.data.repo.home.signUp.SignUpRepoImp
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.login.LoginResponse
-import com.mycash.domain.model.signUp.SignUpResponse
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.responses.LoginResponse
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -18,22 +17,18 @@ class LoginRepoImpTest {
 
     @Test
     fun login() = runTest {
-
             val apiService: ApiService = mockk()
             val loginRepoImp = LoginRepoImp(apiService)
 
             val loginResponse = mockk<LoginResponse>(){
                 every { success } returns true
-                every { message } returns "Sign-up successful"
+                every { message } returns "Log_In successful"
             }
 
-            val email = "asmaa@gmail.com"
-            val password = "12345678"
 
+            coEvery { apiService.login(loggedInUser) } coAnswers { loginResponse}
 
-            coEvery { apiService.login( email, password) } coAnswers { loginResponse}
-
-            val result = loginRepoImp.login( email, password)
+            val result = loginRepoImp.login(loggedInUser)
             assertEquals(ResultApiCall.Success(loginResponse), result)
         }
     }

@@ -1,9 +1,10 @@
 package com.mycash.domain.usecase
 
-import com.mycash.domain.model.ResultApiCall
-import com.mycash.domain.model.homeBaseCategories.HomeBaseCategoriesResponse
-import com.mycash.domain.model.popular_sellers.PopularSellersResponse
-import com.mycash.domain.model.trending_sellers.TrendingSellersResponse
+import com.mycash.domain.TestDummyData.homeRequestData
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.responses.HomeBaseCategoriesResponse
+import com.mycash.domain.models.responses.PopularSellersResponse
+import com.mycash.domain.models.responses.TrendingSellersResponse
 import com.mycash.domain.repo.HomeRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -34,9 +35,6 @@ class HomeUseCaseTest {
 
     @Test
     fun getPopularSellers() = runTest {
-        val lat = 0.5
-        val lang = 1.5
-        val filter = 1
         //given
         val homeRepository: HomeRepository = mockk()
         val homeUseCase = HomeUseCase(homeRepository)
@@ -44,19 +42,17 @@ class HomeUseCaseTest {
         //when
         coEvery {
             homeUseCase.getPopularSellers(
-                lat, lang, filter
+                homeRequestData
             )
         } coAnswers { ResultApiCall.Success(popularSellersResponse) }
         //then
-        val result = homeUseCase.getPopularSellers(lat, lang, filter)
+        val result = homeUseCase.getPopularSellers(homeRequestData)
         assertEquals(ResultApiCall.Success(popularSellersResponse), result)
     }
 
     @Test
     fun getTrendingSellers() = runTest {
-        val lat = 0.5
-        val lang = 1.5
-        val filter = 1
+
         //given
         val homeRepository: HomeRepository = mockk()
         val homeUseCase = HomeUseCase(homeRepository)
@@ -64,11 +60,11 @@ class HomeUseCaseTest {
         //when
         coEvery {
             homeUseCase.getTrendingSellers(
-                lat, lang, filter
+                homeRequestData
             )
         } coAnswers { ResultApiCall.Success(trendingSellersResponse) }
         //then
-        val result = homeUseCase.getTrendingSellers(lat, lang, filter)
+        val result = homeUseCase.getTrendingSellers(homeRequestData)
         assertEquals(ResultApiCall.Success(trendingSellersResponse), result)
     }
 }

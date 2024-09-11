@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mycash.databinding.PopularListItemBinding
-import com.mycash.domain.model.popular_sellers.PopularListItem
+import com.mycash.domain.models.beans.home.popular_sellers.PopularData
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class PopularCategoriesAdapter(private var categories: List<PopularListItem>) :
+class PopularCategoriesAdapter(private var categories: List<PopularData>) :
     RecyclerView.Adapter<PopularCategoriesAdapter.PopularCategoryViewHolder>() {
     inner class PopularCategoryViewHolder(val binding: PopularListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: PopularListItem) {
+        fun bind(category: PopularData) {
             Glide.with(binding.image.context)
                 .load(category.image)
                 .into(binding.image)
@@ -37,7 +37,7 @@ class PopularCategoriesAdapter(private var categories: List<PopularListItem>) :
     }
 
     override fun getItemCount(): Int = categories.size
-    fun updateCategories(newCategories: List<PopularListItem>) {
+    fun updateCategories(newCategories: List<PopularData>) {
         categories = newCategories
         notifyDataSetChanged()
     }

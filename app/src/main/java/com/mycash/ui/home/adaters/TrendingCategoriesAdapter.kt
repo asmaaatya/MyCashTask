@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mycash.databinding.TrendingListItemBinding
-import com.mycash.domain.model.trending_sellers.TrendingItemData
+import com.mycash.domain.models.beans.home.trending_sellers.TrendingData
 
-class TrendingCategoriesAdapter (private var categories: List<TrendingItemData>) : RecyclerView.Adapter<TrendingCategoriesAdapter.TrendingCategoryViewHolder>() {
+class TrendingCategoriesAdapter (private var categories: List<TrendingData>) : RecyclerView.Adapter<TrendingCategoriesAdapter.TrendingCategoryViewHolder>() {
     inner class TrendingCategoryViewHolder(val binding: TrendingListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: TrendingItemData) {
+        fun bind(category: TrendingData) {
             Glide.with(binding.image.context)
                 .load(category.image)
                 .into(binding.image)
@@ -28,7 +28,7 @@ class TrendingCategoriesAdapter (private var categories: List<TrendingItemData>)
     }
 
     override fun getItemCount(): Int = categories.size
-    fun updateCategories(newCategories: List<TrendingItemData>) {
+    fun updateCategories(newCategories: List<TrendingData>) {
         categories = newCategories
         notifyDataSetChanged()
     }

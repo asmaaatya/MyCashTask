@@ -7,17 +7,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mycash.databinding.FragmentHomeBinding
-import com.mycash.domain.model.ResultApiCall
+import com.mycash.domain.models.ResultApiCall
+import com.mycash.domain.models.requests.HomeRequest
 import com.mycash.ui.SharedViewModel
 import com.mycash.ui.home.adaters.HomeCategoriesAdapter
 import com.mycash.ui.home.adaters.PopularCategoriesAdapter
 import com.mycash.ui.home.adaters.TrendingCategoriesAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,24 +39,33 @@ class HomeFragment : Fragment() {
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         getUserData()
         setCategoriesList()
+        lifecycleScope.launch {
+            setPopularList()
+            setTrendingList()
+        }
+
         return binding.root
     }
 
     private fun getUserData() {
         lifecycleScope.launch {
-            sharedViewModel.userData.collect { data ->
+            sharedViewModel.userLogin.collect { data ->
                 data?.let {
                     binding.welcomeTv.text = "Hello, ${it.name}"
                     binding.userLocation.text =
                         (it.addresses.firstOrNull()?.address ?: "No address available").toString()
-                    val address = it.addresses.firstOrNull()
-                    val lat = address?.lat?.toDoubleOrNull() ?: 0.0
-                    val lng = address?.lng?.toDoubleOrNull() ?: 0.0
-                    val filter = 1
-                    setTrendingList(lat, lng, filter)
-                    setPopularList(lat, lng, filter)
                 }
             }
+        }
+    }
+    private suspend fun getHomeRequest(): HomeRequest? {
+        return sharedViewModel.userLogin.firstOrNull()?.let { data ->
+            val address = data.addresses.firstOrNull()
+            val lat = address?.lat?.toDoubleOrNull() ?: 0.0
+            val lng = address?.lng?.toDoubleOrNull() ?: 0.0
+            val filter = 1
+            HomeRequest(lat, lng, filter)
+
         }
     }
 
@@ -67,7 +77,7 @@ class HomeFragment : Fragment() {
             adapter = categoriesAdapter
         }
 
-            homeViewModel.homeBaseCategories.observe(viewLifecycleOwner, Observer  { result ->
+            homeViewModel.homeBaseCategories.observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is ResultApiCall.Loading -> {
                         binding.progressBar.visibility = View.VISIBLE
@@ -83,13 +93,14 @@ class HomeFragment : Fragment() {
 
                         Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                     }
+                    else -> {}
                 }
-                });
+            };
 
         homeViewModel.fetchHomeBaseCategories()
     }
 
-    private fun setTrendingList(lat: Double, lng: Double, filter: Int) {
+    private suspend fun setTrendingList() {
         trendingAdapter = TrendingCategoriesAdapter(listOf())
         binding.trendingRv.apply {
             layoutManager =
@@ -97,7 +108,7 @@ class HomeFragment : Fragment() {
             adapter = trendingAdapter
         }
 
-        homeViewModel.homeTrendingSellers.observe(viewLifecycleOwner, Observer { result ->
+        homeViewModel.homeTrendingSellers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -113,13 +124,14 @@ class HomeFragment : Fragment() {
 
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
-        });
+        };
 
-        homeViewModel.fetchHomeTrendingSellers(lat, lng, filter)
+        homeViewModel.fetchHomeTrendingSellers(getHomeRequest()!!)
     }
 
-    private fun setPopularList(lat: Double, lng: Double, filter: Int) {
+    private suspend fun setPopularList() {
         popularCategoriesAdapter = PopularCategoriesAdapter(listOf())
         binding.popularNowRv.apply {
             layoutManager =
@@ -127,7 +139,7 @@ class HomeFragment : Fragment() {
             adapter = popularCategoriesAdapter
         }
 
-        homeViewModel.homePopularSellers.observe(viewLifecycleOwner, Observer { result ->
+        homeViewModel.homePopularSellers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is ResultApiCall.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -143,10 +155,13 @@ class HomeFragment : Fragment() {
 
                     Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT).show()
                 }
+
+                else -> {}
             }
-        });
+        };
 
 
-        homeViewModel.fetchPopularSellers(lat, lng, filter)
+        homeViewModel.fetchPopularSellers(getHomeRequest()!!)
     }
+
 }
